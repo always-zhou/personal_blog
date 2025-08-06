@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试页面</title>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        function DebugApp() {
+            const [message, setMessage] = React.useState('正在加载...');
+            
+            React.useEffect(() => {
+                console.log('React组件已挂载');
+                setMessage('React正常工作！');
+            }, []);
+            
+            return (
+                <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                        <h1 className="text-3xl font-bold text-blue-600 mb-4">调试页面</h1>
+                        <p className="text-lg text-gray-700">{message}</p>
+                        <div className="mt-4">
+                            <button 
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                onClick={() => setMessage('按钮点击成功！')}
+                            >
+                                测试按钮
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        console.log('开始渲染React应用');
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<DebugApp />);
+        console.log('React应用渲染完成');
+    </script>
+</body>
+</html>

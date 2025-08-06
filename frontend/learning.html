@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习记录 - 个人博客</title>
+    <meta name="description" content="技术学习笔记、读书心得、知识总结">
+    <meta name="keywords" content="学习记录,技术笔记,读书心得,知识总结">
+    <meta property="og:title" content="学习记录 - 个人博客">
+    <meta property="og:description" content="技术学习笔记、读书心得、知识总结">
+    <meta name="twitter:title" content="学习记录 - 个人博客">
+    <meta name="twitter:description" content="技术学习笔记、读书心得、知识总结">
+    
+    <!-- React and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 主题变量 */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+        
+        /* 渐变文本 */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 霓虹灯光效果 */
+        .neon-glow {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+        }
+        
+        /* 矩阵雨动画 */
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        /* 粒子星系动画 */
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(15px) rotate(240deg); }
+        }
+        
+        .particle-galaxy {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        /* 宇宙波纹动画 */
+        @keyframes cosmic-ripple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        .cosmic-ripple {
+            animation: cosmic-ripple 4s ease-out infinite;
+        }
+        
+        /* 全息闪烁效果 */
+        @keyframes holographic-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .holographic {
+            animation: holographic-flicker 2s ease-in-out infinite;
+        }
+        
+        /* 赛博格网格 */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .cyber-cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            position: relative;
+        }
+        
+        .cyber-cell.active {
+            background: rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        
+        /* 故障文本效果 */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .glitch-text {
+            animation: glitch 0.3s ease-in-out infinite alternate;
+        }
+        
+        /* 渐变位移动画 */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-shift {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        // 学习记录页面组件
+        function LearningPage() {
+            const [posts, setPosts] = React.useState([]);
+            const [loading, setLoading] = React.useState(true);
+            const [error, setError] = React.useState(null);
+            
+            React.useEffect(() => {
+                // 从API加载学习记录
+                fetch('/api/posts/learning')
+                    .then(response => response.json())
+                    .then(data => {
+                        setPosts(data.posts || []);
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error('Failed to load learning posts:', err);
+                        setError('加载失败');
+                        setLoading(false);
+                        // 使用示例数据
+                        setPosts([
+                            {
+                                id: 1,
+                                title: 'React Hooks 深度解析',
+                                content: '深入理解 React Hooks 的工作原理和最佳实践...',
+                                tags: ['React', 'JavaScript', 'Frontend'],
+                                createdAt: '2024-01-15',
+                                readTime: '8 分钟'
+                            },
+                            {
+                                id: 2,
+                                title: 'TypeScript 进阶技巧',
+                                content: '掌握 TypeScript 的高级类型系统和实用技巧...',
+                                tags: ['TypeScript', 'JavaScript'],
+                                createdAt: '2024-01-10',
+                                readTime: '12 分钟'
+                            },
+                            {
+                                id: 3,
+                                title: 'Node.js 性能优化',
+                                content: '提升 Node.js 应用性能的实用方法和工具...',
+                                tags: ['Node.js', 'Backend', 'Performance'],
+                                createdAt: '2024-01-05',
+                                readTime: '15 分钟'
+                            }
+                        ]);
+                    });
+            }, []);
+            
+            // 背景效果组件
+            const BackgroundEffects = () => {
+                React.useEffect(() => {
+                    // 赛博格网格效果
+                    const createCyberGrid = () => {
+                        const grid = document.querySelector('.cyber-grid');
+                        if (!grid) return;
+                        
+                        grid.innerHTML = '';
+                        const gridSize = 50;
+                        const rows = Math.ceil(window.innerHeight / gridSize);
+                        const cols = Math.ceil(window.innerWidth / gridSize);
+                        
+                        for (let i = 0; i < rows * cols; i++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'cyber-cell';
+                            if (Math.random() < 0.1) {
+                                cell.classList.add('active');
+                            }
+                            grid.appendChild(cell);
+                        }
+                    };
+
+                    // 矩阵雨效果
+                    const createMatrixRain = () => {
+                        const canvas = document.querySelector('.matrix-rain');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+                        const charArray = chars.split('');
+                        const fontSize = 14;
+                        const columns = canvas.width / fontSize;
+                        const drops = Array(Math.floor(columns)).fill(1);
+                        
+                        const draw = () => {
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            
+                            ctx.fillStyle = '#0f0';
+                            ctx.font = `${fontSize}px monospace`;
+                            
+                            for (let i = 0; i < drops.length; i++) {
+                                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                                
+                                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                                    drops[i] = 0;
+                                }
+                                drops[i]++;
+                            }
+                        };
+                        
+                        const interval = setInterval(draw, 50);
+                        return () => clearInterval(interval);
+                    };
+
+                    // 粒子星系效果
+                    const createParticleGalaxy = () => {
+                        const canvas = document.querySelector('.particle-galaxy');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const particles = [];
+                        const particleCount = 100;
+                        
+                        for (let i = 0; i < particleCount; i++) {
+                            particles.push({
+                                x: Math.random() * canvas.width,
+                                y: Math.random() * canvas.height,
+                                vx: (Math.random() - 0.5) * 0.5,
+                                vy: (Math.random() - 0.5) * 0.5,
+                                size: Math.random() * 2 + 1,
+                                opacity: Math.random() * 0.5 + 0.2
+                            });
+                        }
+                        
+                        const animate = () => {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            
+                            particles.forEach(particle => {
+                                particle.x += particle.vx;
+                                particle.y += particle.vy;
+                                
+                                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                                
+                                ctx.beginPath();
+                                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                                ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+                                ctx.fill();
+                            });
+                            
+                            requestAnimationFrame(animate);
+                        };
+                        
+                        animate();
+                    };
+
+                    createCyberGrid();
+                    const matrixCleanup = createMatrixRain();
+                    createParticleGalaxy();
+                    
+                    const handleResize = () => {
+                        createCyberGrid();
+                    };
+                    
+                    window.addEventListener('resize', handleResize);
+                    
+                    return () => {
+                        window.removeEventListener('resize', handleResize);
+                        if (matrixCleanup) matrixCleanup();
+                    };
+                }, []);
+
+                return (
+                    <>
+                        <div className="cyber-grid"></div>
+                        <canvas className="matrix-rain"></canvas>
+                        <canvas className="particle-galaxy"></canvas>
+                    </>
+                );
+            };
+            
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden">
+                    <BackgroundEffects />
+                    
+                    {/* 主要内容 */}
+                    <div className="relative z-10">
+                        {/* 导航栏 */}
+                        <nav className="bg-black/20 backdrop-blur-md border-b border-white/10">
+                            <div className="max-w-7xl mx-auto px-6 py-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <div className="flex items-center space-x-6">
+                                        <a href="index.html" className="text-white/70 hover:text-white transition-colors">首页</a>
+                                        <a href="learning.html" className="text-white font-medium">学习</a>
+                                        <a href="fitness.html" className="text-white/70 hover:text-white transition-colors">健身</a>
+                                        <a href="life.html" className="text-white/70 hover:text-white transition-colors">生活</a>
+                                        <a href="photography.html" className="text-white/70 hover:text-white transition-colors">摄影</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                        
+                        {/* 页面标题 */}
+                        <section className="py-20 px-6">
+                            <div className="max-w-4xl mx-auto text-center">
+                                <h1 className="text-5xl font-bold text-white mb-6 neon-glow">
+                                    📚 学习记录
+                                </h1>
+                                <p className="text-xl text-white/70 max-w-2xl mx-auto">
+                                    技术学习笔记、读书心得、知识总结
+                                </p>
+                            </div>
+                        </section>
+                        
+                        {/* 文章列表 */}
+                        <section className="py-10 px-6">
+                            <div className="max-w-4xl mx-auto">
+                                {loading ? (
+                                    <div className="text-center py-20">
+                                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                                        <p className="text-white/70 mt-4">加载中...</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="text-center py-20">
+                                        <p className="text-red-400 mb-4">{error}</p>
+                                        <button 
+                                            onClick={() => window.location.reload()}
+                                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                        >
+                                            重试
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-8">
+                                        {posts.map((post, index) => (
+                                            <article key={post.id || index} className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
+                                                <div className="flex items-start justify-between mb-4">
+                                                    <h2 className="text-2xl font-bold text-white mb-2">
+                                                        {post.title}
+                                                    </h2>
+                                                    <span className="text-white/60 text-sm">
+                                                        {post.readTime}
+                                                    </span>
+                                                </div>
+                                                
+                                                <p className="text-white/80 mb-6 leading-relaxed">
+                                                    {post.content}
+                                                </p>
+                                                
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {post.tags && post.tags.map((tag, tagIndex) => (
+                                                            <span key={tagIndex} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">
+                                                                {tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                    <span className="text-white/60 text-sm">
+                                                        {post.createdAt}
+                                                    </span>
+                                                </div>
+                                            </article>
+                                        ))}
+                                        
+                                        {posts.length === 0 && (
+                                            <div className="text-center py-20">
+                                                <p className="text-white/70 text-lg">暂无学习记录</p>
+                                                <p className="text-white/50 mt-2">开始记录你的学习历程吧！</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                        
+                        {/* 底部 */}
+                        <footer className="relative bg-gray-900/50 backdrop-blur-md border-t border-white/10 mt-20">
+                            <div className="max-w-7xl mx-auto px-6 py-12">
+                                <div className="text-center">
+                                    <div className="flex items-center justify-center space-x-3 mb-6">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <p className="text-white/70 mb-8 max-w-md mx-auto">
+                                        分享知识，记录成长，感悟生活
+                                    </p>
+                                    <div className="border-t border-white/10 pt-8">
+                                        <p className="text-white/50 text-sm">
+                                            &copy; 2025 个人博客. 用心记录，用爱分享.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            );
+        }
+        
+        // 渲染应用
+        ReactDOM.render(<LearningPage />, document.getElementById('root'));
+    </script>
+</body>
+</html>

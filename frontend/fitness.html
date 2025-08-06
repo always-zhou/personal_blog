@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健身记录 - 个人博客</title>
+    <meta name="description" content="运动日志、健身计划、身体变化追踪">
+    <meta name="keywords" content="健身记录,运动日志,健身计划,身体变化">
+    <meta property="og:title" content="健身记录 - 个人博客">
+    <meta property="og:description" content="运动日志、健身计划、身体变化追踪">
+    <meta name="twitter:title" content="健身记录 - 个人博客">
+    <meta name="twitter:description" content="运动日志、健身计划、身体变化追踪">
+    
+    <!-- React and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 主题变量 */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --secondary-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            --accent-gradient: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            --dark-gradient: linear-gradient(135deg, #065f46 0%, #047857 100%);
+        }
+        
+        /* 渐变文本 */
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 霓虹灯光效果 */
+        .neon-glow {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+        }
+        
+        /* 矩阵雨动画 */
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        /* 粒子星系动画 */
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(15px) rotate(240deg); }
+        }
+        
+        .particle-galaxy {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        /* 宇宙波纹动画 */
+        @keyframes cosmic-ripple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        .cosmic-ripple {
+            animation: cosmic-ripple 4s ease-out infinite;
+        }
+        
+        /* 全息闪烁效果 */
+        @keyframes holographic-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .holographic {
+            animation: holographic-flicker 2s ease-in-out infinite;
+        }
+        
+        /* 赛博格网格 */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .cyber-cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            position: relative;
+        }
+        
+        .cyber-cell.active {
+            background: rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* 故障文本效果 */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .glitch-text {
+            animation: glitch 0.3s ease-in-out infinite alternate;
+        }
+        
+        /* 渐变位移动画 */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-shift {
+            background: linear-gradient(-45deg, #10b981, #059669, #0d9488, #0f766e, #34d399, #047857);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+        
+        /* 进度条动画 */
+        @keyframes progress-fill {
+            0% { width: 0%; }
+            100% { width: var(--progress-width); }
+        }
+        
+        .progress-bar {
+            animation: progress-fill 1.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        // 健身记录页面组件
+        function FitnessPage() {
+            const [workouts, setWorkouts] = React.useState([]);
+            const [stats, setStats] = React.useState({});
+            const [loading, setLoading] = React.useState(true);
+            const [error, setError] = React.useState(null);
+            
+            React.useEffect(() => {
+                // 从API加载健身记录
+                fetch('/api/posts/fitness')
+                    .then(response => response.json())
+                    .then(data => {
+                        setWorkouts(data.workouts || []);
+                        setStats(data.stats || {});
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error('Failed to load fitness data:', err);
+                        setError('加载失败');
+                        setLoading(false);
+                        // 使用示例数据
+                        setWorkouts([
+                            {
+                                id: 1,
+                                date: '2024-01-15',
+                                type: '力量训练',
+                                duration: '90分钟',
+                                exercises: ['深蹲', '卧推', '硬拉'],
+                                calories: 450,
+                                notes: '今天状态很好，重量有所提升',
+                                intensity: 'high'
+                            },
+                            {
+                                id: 2,
+                                date: '2024-01-13',
+                                type: '有氧运动',
+                                duration: '45分钟',
+                                exercises: ['跑步', '动感单车'],
+                                calories: 380,
+                                notes: '心率控制得很好，感觉很棒',
+                                intensity: 'medium'
+                            },
+                            {
+                                id: 3,
+                                date: '2024-01-11',
+                                type: '功能性训练',
+                                duration: '60分钟',
+                                exercises: ['平板支撑', '波比跳', '俯卧撑'],
+                                calories: 320,
+                                notes: '核心力量训练，全身都在燃烧',
+                                intensity: 'high'
+                            }
+                        ]);
+                        setStats({
+                            totalWorkouts: 24,
+                            totalHours: 36,
+                            avgCalories: 385,
+                            currentStreak: 7
+                        });
+                    });
+            }, []);
+            
+            // 背景效果组件
+            const BackgroundEffects = () => {
+                React.useEffect(() => {
+                    // 赛博格网格效果
+                    const createCyberGrid = () => {
+                        const grid = document.querySelector('.cyber-grid');
+                        if (!grid) return;
+                        
+                        grid.innerHTML = '';
+                        const gridSize = 50;
+                        const rows = Math.ceil(window.innerHeight / gridSize);
+                        const cols = Math.ceil(window.innerWidth / gridSize);
+                        
+                        for (let i = 0; i < rows * cols; i++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'cyber-cell';
+                            if (Math.random() < 0.1) {
+                                cell.classList.add('active');
+                            }
+                            grid.appendChild(cell);
+                        }
+                    };
+
+                    // 矩阵雨效果
+                    const createMatrixRain = () => {
+                        const canvas = document.querySelector('.matrix-rain');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const chars = '💪🏃‍♂️🏋️‍♀️⚡🔥💯🎯🏆⭐';
+                        const charArray = chars.split('');
+                        const fontSize = 20;
+                        const columns = canvas.width / fontSize;
+                        const drops = Array(Math.floor(columns)).fill(1);
+                        
+                        const draw = () => {
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            
+                            ctx.fillStyle = '#10b981';
+                            ctx.font = `${fontSize}px monospace`;
+                            
+                            for (let i = 0; i < drops.length; i++) {
+                                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                                
+                                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                                    drops[i] = 0;
+                                }
+                                drops[i]++;
+                            }
+                        };
+                        
+                        const interval = setInterval(draw, 100);
+                        return () => clearInterval(interval);
+                    };
+
+                    // 粒子星系效果
+                    const createParticleGalaxy = () => {
+                        const canvas = document.querySelector('.particle-galaxy');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const particles = [];
+                        const particleCount = 80;
+                        
+                        for (let i = 0; i < particleCount; i++) {
+                            particles.push({
+                                x: Math.random() * canvas.width,
+                                y: Math.random() * canvas.height,
+                                vx: (Math.random() - 0.5) * 0.8,
+                                vy: (Math.random() - 0.5) * 0.8,
+                                size: Math.random() * 3 + 1,
+                                opacity: Math.random() * 0.6 + 0.2,
+                                color: `hsl(${Math.random() * 60 + 140}, 70%, 60%)`
+                            });
+                        }
+                        
+                        const animate = () => {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            
+                            particles.forEach(particle => {
+                                particle.x += particle.vx;
+                                particle.y += particle.vy;
+                                
+                                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                                
+                                ctx.beginPath();
+                                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                                ctx.fillStyle = particle.color;
+                                ctx.globalAlpha = particle.opacity;
+                                ctx.fill();
+                                ctx.globalAlpha = 1;
+                            });
+                            
+                            requestAnimationFrame(animate);
+                        };
+                        
+                        animate();
+                    };
+
+                    createCyberGrid();
+                    const matrixCleanup = createMatrixRain();
+                    createParticleGalaxy();
+                    
+                    const handleResize = () => {
+                        createCyberGrid();
+                    };
+                    
+                    window.addEventListener('resize', handleResize);
+                    
+                    return () => {
+                        window.removeEventListener('resize', handleResize);
+                        if (matrixCleanup) matrixCleanup();
+                    };
+                }, []);
+
+                return (
+                    <>
+                        <div className="cyber-grid"></div>
+                        <canvas className="matrix-rain"></canvas>
+                        <canvas className="particle-galaxy"></canvas>
+                    </>
+                );
+            };
+            
+            // 获取强度颜色
+            const getIntensityColor = (intensity) => {
+                switch (intensity) {
+                    case 'high': return 'text-red-300 bg-red-500/20';
+                    case 'medium': return 'text-yellow-300 bg-yellow-500/20';
+                    case 'low': return 'text-green-300 bg-green-500/20';
+                    default: return 'text-blue-300 bg-blue-500/20';
+                }
+            };
+            
+            // 获取运动类型图标
+            const getWorkoutIcon = (type) => {
+                switch (type) {
+                    case '力量训练': return '🏋️‍♂️';
+                    case '有氧运动': return '🏃‍♂️';
+                    case '功能性训练': return '💪';
+                    case '瑜伽': return '🧘‍♀️';
+                    case '游泳': return '🏊‍♂️';
+                    default: return '⚡';
+                }
+            };
+            
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 relative overflow-hidden">
+                    <BackgroundEffects />
+                    
+                    {/* 主要内容 */}
+                    <div className="relative z-10">
+                        {/* 导航栏 */}
+                        <nav className="bg-black/20 backdrop-blur-md border-b border-white/10">
+                            <div className="max-w-7xl mx-auto px-6 py-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <div className="flex items-center space-x-6">
+                                        <a href="index.html" className="text-white/70 hover:text-white transition-colors">首页</a>
+                                        <a href="learning.html" className="text-white/70 hover:text-white transition-colors">学习</a>
+                                        <a href="fitness.html" className="text-white font-medium">健身</a>
+                                        <a href="life.html" className="text-white/70 hover:text-white transition-colors">生活</a>
+                                        <a href="photography.html" className="text-white/70 hover:text-white transition-colors">摄影</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                        
+                        {/* 页面标题 */}
+                        <section className="py-20 px-6">
+                            <div className="max-w-4xl mx-auto text-center">
+                                <h1 className="text-5xl font-bold text-white mb-6 neon-glow">
+                                    💪 健身记录
+                                </h1>
+                                <p className="text-xl text-white/70 max-w-2xl mx-auto">
+                                    强健体魄 · 挑战自我 · 持续进步
+                                </p>
+                            </div>
+                        </section>
+                        
+                        {/* 统计数据 */}
+                        {!loading && !error && (
+                            <section className="py-10 px-6">
+                                <div className="max-w-6xl mx-auto">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                                        <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                            <div className="text-4xl mb-3">🏋️‍♂️</div>
+                                            <div className="text-2xl font-bold text-white">{stats.totalWorkouts || 0}</div>
+                                            <div className="text-white/70 text-sm">总训练次数</div>
+                                        </div>
+                                        
+                                        <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                            <div className="text-4xl mb-3">⏱️</div>
+                                            <div className="text-2xl font-bold text-white">{stats.totalHours || 0}h</div>
+                                            <div className="text-white/70 text-sm">总训练时长</div>
+                                        </div>
+                                        
+                                        <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                            <div className="text-4xl mb-3">🔥</div>
+                                            <div className="text-2xl font-bold text-white">{stats.avgCalories || 0}</div>
+                                            <div className="text-white/70 text-sm">平均消耗</div>
+                                        </div>
+                                        
+                                        <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                            <div className="text-4xl mb-3">🎯</div>
+                                            <div className="text-2xl font-bold text-white">{stats.currentStreak || 0}</div>
+                                            <div className="text-white/70 text-sm">连续天数</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+                        
+                        {/* 训练记录列表 */}
+                        <section className="py-10 px-6">
+                            <div className="max-w-4xl mx-auto">
+                                <h2 className="text-3xl font-bold text-white mb-8">训练日志</h2>
+                                
+                                {loading ? (
+                                    <div className="text-center py-20">
+                                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                                        <p className="text-white/70 mt-4">加载中...</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="text-center py-20">
+                                        <p className="text-red-400 mb-4">{error}</p>
+                                        <button 
+                                            onClick={() => window.location.reload()}
+                                            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                                        >
+                                            重试
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6">
+                                        {workouts.map((workout, index) => (
+                                            <article key={workout.id || index} className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
+                                                <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                                                    <div className="flex items-center space-x-4">
+                                                        <div className="text-4xl">
+                                                            {getWorkoutIcon(workout.type)}
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-2xl font-bold text-white mb-1">
+                                                                {workout.type}
+                                                            </h3>
+                                                            <p className="text-white/60">{workout.date}</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="flex items-center space-x-6 mt-4 md:mt-0">
+                                                        <div className="text-center">
+                                                            <div className="text-lg font-semibold text-white">{workout.duration}</div>
+                                                            <div className="text-white/60 text-sm">时长</div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-lg font-semibold text-white">{workout.calories}</div>
+                                                            <div className="text-white/60 text-sm">卡路里</div>
+                                                        </div>
+                                                        {workout.intensity && (
+                                                            <div className="text-center">
+                                                                <span className={`px-3 py-1 rounded-full text-sm ${getIntensityColor(workout.intensity)}`}>
+                                                                    {workout.intensity === 'high' ? '高强度' : 
+                                                                     workout.intensity === 'medium' ? '中强度' : '低强度'}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="mb-4">
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {workout.exercises && workout.exercises.map((exercise, exerciseIndex) => (
+                                                            <span key={exerciseIndex} className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">
+                                                                {exercise}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                
+                                                {workout.notes && (
+                                                    <p className="text-white/80 leading-relaxed">
+                                                        {workout.notes}
+                                                    </p>
+                                                )}
+                                            </article>
+                                        ))}
+                                        
+                                        {workouts.length === 0 && (
+                                            <div className="text-center py-20">
+                                                <p className="text-white/70 text-lg">暂无训练记录</p>
+                                                <p className="text-white/50 mt-2">开始你的健身之旅吧！</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                        
+                        {/* 底部 */}
+                        <footer className="relative bg-gray-900/50 backdrop-blur-md border-t border-white/10 mt-20">
+                            <div className="max-w-7xl mx-auto px-6 py-12">
+                                <div className="text-center">
+                                    <div className="flex items-center justify-center space-x-3 mb-6">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <p className="text-white/70 mb-8 max-w-md mx-auto">
+                                        分享知识，记录成长，感悟生活
+                                    </p>
+                                    <div className="border-t border-white/10 pt-8">
+                                        <p className="text-white/50 text-sm">
+                                            &copy; 2025 个人博客. 用心记录，用爱分享.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            );
+        }
+        
+        // 渲染应用
+        ReactDOM.render(<FitnessPage />, document.getElementById('root'));
+    </script>
+</body>
+</html>

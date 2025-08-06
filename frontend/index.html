@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人博客 - 记录生活的每一刻</title>
+    <meta name="description" content="个人博客网站，记录学习、健身、生活和摄影的点点滴滴">
+    <meta name="keywords" content="个人博客,学习记录,健身日记,生活分享,摄影作品">
+    <meta property="og:title" content="个人博客 - 记录生活的每一刻">
+    <meta property="og:description" content="个人博客网站，记录学习、健身、生活和摄影的点点滴滴">
+    <meta name="twitter:title" content="个人博客 - 记录生活的每一刻">
+    <meta name="twitter:description" content="个人博客网站，记录学习、健身、生活和摄影的点点滴滴">
+    
+    <!-- React and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 主题变量 */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --secondary-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --dark-gradient: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+        }
+        
+        /* 渐变文本 */
+        .gradient-text {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 霓虹灯光效果 */
+        .neon-glow {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+        }
+        
+        /* 矩阵雨动画 */
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        /* 粒子星系动画 */
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(15px) rotate(240deg); }
+        }
+        
+        .particle-galaxy {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        /* 宇宙波纹动画 */
+        @keyframes cosmic-ripple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        .cosmic-ripple {
+            animation: cosmic-ripple 4s ease-out infinite;
+        }
+        
+        /* 全息闪烁效果 */
+        @keyframes holographic-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .holographic {
+            animation: holographic-flicker 2s ease-in-out infinite;
+        }
+        
+        /* 赛博格网格 */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(245, 158, 11, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(245, 158, 11, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .cyber-cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(245, 158, 11, 0.1);
+            position: relative;
+        }
+        
+        .cyber-cell.active {
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+        
+        /* 故障文本效果 */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .glitch-text {
+            animation: glitch 0.3s ease-in-out infinite alternate;
+        }
+        
+        /* 渐变位移动画 */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-shift {
+            background: linear-gradient(-45deg, #f59e0b, #d97706, #f97316, #ea580c, #fbbf24, #b45309);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+        
+        /* 分类卡片特殊效果 */
+        .category-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .category-card:hover::before {
+            left: 100%;
+        }
+        
+        /* 英雄区域动画 */
+        .hero-animation {
+            animation: hero-float 6s ease-in-out infinite;
+        }
+        
+        @keyframes hero-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* 打字机效果 */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid #f59e0b;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #f59e0b; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        // 首页组件
+        function HomePage() {
+            const [categories, setCategories] = React.useState([]);
+            const [loading, setLoading] = React.useState(true);
+            const [error, setError] = React.useState(null);
+            
+            React.useEffect(() => {
+                // 从API加载分类数据
+                fetch('/api/categories')
+                    .then(res => res.json())
+                    .then(data => {
+                        setCategories(data.length ? data : [
+                            {
+                                id: 1,
+                                title: '学习记录',
+                                description: '技术学习、读书笔记、知识总结',
+                                emoji: '📚',
+                                gradient: 'from-blue-500 to-purple-600',
+                                href: 'learning.html',
+                                count: 25
+                            },
+                            {
+                                id: 2,
+                                title: '健身日记',
+                                description: '运动记录、健身心得、身体管理',
+                                emoji: '💪',
+                                gradient: 'from-green-500 to-teal-600',
+                                href: 'fitness.html',
+                                count: 18
+                            },
+                            {
+                                id: 3,
+                                title: '生活分享',
+                                description: '日常感悟、生活点滴、心情随笔',
+                                emoji: '🌟',
+                                gradient: 'from-pink-500 to-rose-600',
+                                href: 'life.html',
+                                count: 32
+                            },
+                            {
+                                id: 4,
+                                title: '摄影作品',
+                                description: '风景摄影、人像作品、摄影技巧',
+                                emoji: '📸',
+                                gradient: 'from-orange-500 to-red-600',
+                                href: 'photography.html',
+                                count: 15
+                            }
+                        ]);
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error('Failed to load categories:', err);
+                        setError('加载失败');
+                        setLoading(false);
+                    });
+            }, []);
+            
+            // 背景效果组件
+            const BackgroundEffects = () => {
+                React.useEffect(() => {
+                    // 赛博格网格效果
+                    const createCyberGrid = () => {
+                        const grid = document.querySelector('.cyber-grid');
+                        if (!grid) return;
+                        
+                        grid.innerHTML = '';
+                        const gridSize = 50;
+                        const rows = Math.ceil(window.innerHeight / gridSize);
+                        const cols = Math.ceil(window.innerWidth / gridSize);
+                        
+                        for (let i = 0; i < rows * cols; i++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'cyber-cell';
+                            if (Math.random() < 0.1) {
+                                cell.classList.add('active');
+                            }
+                            grid.appendChild(cell);
+                        }
+                    };
+
+                    // 矩阵雨效果
+                    const createMatrixRain = () => {
+                        const canvas = document.querySelector('.matrix-rain');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const chars = '📚💪🌟📸💻🚀⭐✨💡🎯🔥🎨📝';
+                        const charArray = chars.split('');
+                        const fontSize = 20;
+                        const columns = canvas.width / fontSize;
+                        const drops = Array(Math.floor(columns)).fill(1);
+                        
+                        const draw = () => {
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            
+                            ctx.fillStyle = '#f59e0b';
+                            ctx.font = `${fontSize}px monospace`;
+                            
+                            for (let i = 0; i < drops.length; i++) {
+                                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                                
+                                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                                    drops[i] = 0;
+                                }
+                                drops[i]++;
+                            }
+                        };
+                        
+                        const interval = setInterval(draw, 100);
+                        return () => clearInterval(interval);
+                    };
+
+                    // 粒子星系效果
+                    const createParticleGalaxy = () => {
+                        const canvas = document.querySelector('.particle-galaxy');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const particles = [];
+                        const particleCount = 80;
+                        
+                        for (let i = 0; i < particleCount; i++) {
+                            particles.push({
+                                x: Math.random() * canvas.width,
+                                y: Math.random() * canvas.height,
+                                vx: (Math.random() - 0.5) * 0.8,
+                                vy: (Math.random() - 0.5) * 0.8,
+                                size: Math.random() * 3 + 1,
+                                opacity: Math.random() * 0.6 + 0.2,
+                                color: `hsl(${Math.random() * 60 + 30}, 70%, 60%)`
+                            });
+                        }
+                        
+                        const animate = () => {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            
+                            particles.forEach(particle => {
+                                particle.x += particle.vx;
+                                particle.y += particle.vy;
+                                
+                                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                                
+                                ctx.beginPath();
+                                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                                ctx.fillStyle = particle.color;
+                                ctx.globalAlpha = particle.opacity;
+                                ctx.fill();
+                                ctx.globalAlpha = 1;
+                            });
+                            
+                            requestAnimationFrame(animate);
+                        };
+                        
+                        animate();
+                    };
+
+                    createCyberGrid();
+                    const matrixCleanup = createMatrixRain();
+                    createParticleGalaxy();
+                    
+                    const handleResize = () => {
+                        createCyberGrid();
+                    };
+                    
+                    window.addEventListener('resize', handleResize);
+                    
+                    return () => {
+                        window.removeEventListener('resize', handleResize);
+                        if (matrixCleanup) matrixCleanup();
+                    };
+                }, []);
+
+                return (
+                    <>
+                        <div className="cyber-grid"></div>
+                        <canvas className="matrix-rain"></canvas>
+                        <canvas className="particle-galaxy"></canvas>
+                    </>
+                );
+            };
+            
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-orange-900 via-amber-900 to-yellow-900 relative overflow-hidden">
+                    <BackgroundEffects />
+                    
+                    {/* 主要内容 */}
+                    <div className="relative z-10">
+                        {/* 导航栏 */}
+                        <nav className="bg-black/20 backdrop-blur-md border-b border-white/10">
+                            <div className="max-w-7xl mx-auto px-6 py-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <div className="flex items-center space-x-6">
+                                        <a href="index.html" className="text-white font-medium">首页</a>
+                                        <a href="learning.html" className="text-white/70 hover:text-white transition-colors">学习</a>
+                                        <a href="fitness.html" className="text-white/70 hover:text-white transition-colors">健身</a>
+                                        <a href="life.html" className="text-white/70 hover:text-white transition-colors">生活</a>
+                                        <a href="photography.html" className="text-white/70 hover:text-white transition-colors">摄影</a>
+                                        <a href="about.html" className="text-white/70 hover:text-white transition-colors">关于</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                        
+                        {/* 英雄区域 */}
+                        <section className="py-20 px-6 text-center">
+                            <div className="max-w-4xl mx-auto">
+                                <div className="hero-animation mb-8">
+                                    <h1 className="text-6xl font-bold text-white mb-6 neon-glow">
+                                        记录生活的每一刻
+                                    </h1>
+                                    <p className="text-xl text-white/70 max-w-2xl mx-auto mb-8">
+                                        在这里分享我的学习心得、健身记录、生活感悟和摄影作品
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-4">
+                                    <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                        <span className="text-white/80 text-sm">✨ 持续更新中</span>
+                                    </div>
+                                    <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                        <span className="text-white/80 text-sm">🎯 用心记录</span>
+                                    </div>
+                                    <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                        <span className="text-white/80 text-sm">💫 分享成长</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        {/* 分类展示区域 */}
+                        <section className="py-16 px-6">
+                            <div className="max-w-6xl mx-auto">
+                                <h2 className="text-3xl font-bold text-white mb-12 text-center neon-glow">
+                                    🌈 内容分类
+                                </h2>
+                                {loading ? (
+                                    <div className="text-center py-10">
+                                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                                        <p className="text-white/70 mt-4">加载中...</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="text-center py-10">
+                                        <p className="text-red-400">{error}</p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                        {categories.map((category, index) => (
+                                            <a 
+                                                key={category.id || index}
+                                                href={category.href}
+                                                className="category-card card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 block group"
+                                            >
+                                                <div className="text-center">
+                                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
+                                                        {category.emoji}
+                                                    </div>
+                                                    <h3 className="text-xl font-bold text-white mb-2">
+                                                        {category.title}
+                                                    </h3>
+                                                    <p className="text-white/70 text-sm mb-4">
+                                                        {category.description}
+                                                    </p>
+                                                    <div className="flex items-center justify-center space-x-2">
+                                                        <span className="text-orange-400 font-medium">
+                                                            {category.count} 篇文章
+                                                        </span>
+                                                        <span className="text-white/50">→</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                        
+                        {/* 特色功能区域 */}
+                        <section className="py-16 px-6">
+                            <div className="max-w-6xl mx-auto">
+                                <h2 className="text-3xl font-bold text-white mb-12 text-center neon-glow">
+                                    ⚡ 特色功能
+                                </h2>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                        <div className="text-3xl mb-4">🔍</div>
+                                        <h3 className="text-lg font-bold text-white mb-2">智能搜索</h3>
+                                        <p className="text-white/70 text-sm">快速找到你想要的内容</p>
+                                    </div>
+                                    <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                        <div className="text-3xl mb-4">📊</div>
+                                        <h3 className="text-lg font-bold text-white mb-2">数据统计</h3>
+                                        <p className="text-white/70 text-sm">记录和分析个人成长数据</p>
+                                    </div>
+                                    <div className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                                        <div className="text-3xl mb-4">🎨</div>
+                                        <h3 className="text-lg font-bold text-white mb-2">精美设计</h3>
+                                        <p className="text-white/70 text-sm">现代化的界面和交互体验</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        {/* 底部 */}
+                        <footer className="relative bg-gray-900/50 backdrop-blur-md border-t border-white/10 mt-20">
+                            <div className="max-w-7xl mx-auto px-6 py-12">
+                                <div className="text-center">
+                                    <div className="flex items-center justify-center space-x-3 mb-6">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <p className="text-white/70 mb-8 max-w-md mx-auto">
+                                        分享知识，记录成长，感悟生活
+                                    </p>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                        <a href="learning.html" className="text-white/60 hover:text-white transition-colors">学习记录</a>
+                                        <a href="fitness.html" className="text-white/60 hover:text-white transition-colors">健身日记</a>
+                                        <a href="life.html" className="text-white/60 hover:text-white transition-colors">生活分享</a>
+                                        <a href="photography.html" className="text-white/60 hover:text-white transition-colors">摄影作品</a>
+                                    </div>
+                                    <div className="border-t border-white/10 pt-8">
+                                        <p className="text-white/50 text-sm">
+                                            &copy; 2025 个人博客. 用心记录，用爱分享.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            );
+        }
+        
+        // 渲染应用
+        ReactDOM.render(<HomePage />, document.getElementById('root'));
+    </script>
+</body>
+</html>

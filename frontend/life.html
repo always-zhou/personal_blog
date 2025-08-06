@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生活分享 - 个人博客</title>
+    <meta name="description" content="生活感悟、日常记录、心情随笔">
+    <meta name="keywords" content="生活分享,日常记录,心情随笔,生活感悟">
+    <meta property="og:title" content="生活分享 - 个人博客">
+    <meta property="og:description" content="生活感悟、日常记录、心情随笔">
+    <meta name="twitter:title" content="生活分享 - 个人博客">
+    <meta name="twitter:description" content="生活感悟、日常记录、心情随笔">
+    
+    <!-- React and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 主题变量 */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --secondary-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --dark-gradient: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+        }
+        
+        /* 渐变文本 */
+        .gradient-text {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 霓虹灯光效果 */
+        .neon-glow {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+        }
+        
+        /* 矩阵雨动画 */
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        /* 粒子星系动画 */
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(15px) rotate(240deg); }
+        }
+        
+        .particle-galaxy {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        /* 宇宙波纹动画 */
+        @keyframes cosmic-ripple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        .cosmic-ripple {
+            animation: cosmic-ripple 4s ease-out infinite;
+        }
+        
+        /* 全息闪烁效果 */
+        @keyframes holographic-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .holographic {
+            animation: holographic-flicker 2s ease-in-out infinite;
+        }
+        
+        /* 赛博格网格 */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(245, 158, 11, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(245, 158, 11, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .cyber-cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(245, 158, 11, 0.1);
+            position: relative;
+        }
+        
+        .cyber-cell.active {
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+        
+        /* 故障文本效果 */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .glitch-text {
+            animation: glitch 0.3s ease-in-out infinite alternate;
+        }
+        
+        /* 渐变位移动画 */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-shift {
+            background: linear-gradient(-45deg, #f59e0b, #d97706, #f97316, #ea580c, #fbbf24, #b45309);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+        
+        /* 心情标签样式 */
+        .mood-happy { @apply bg-yellow-500/20 text-yellow-300; }
+        .mood-excited { @apply bg-orange-500/20 text-orange-300; }
+        .mood-calm { @apply bg-blue-500/20 text-blue-300; }
+        .mood-thoughtful { @apply bg-purple-500/20 text-purple-300; }
+        .mood-grateful { @apply bg-green-500/20 text-green-300; }
+        .mood-nostalgic { @apply bg-pink-500/20 text-pink-300; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        // 生活分享页面组件
+        function LifePage() {
+            const [posts, setPosts] = React.useState([]);
+            const [loading, setLoading] = React.useState(true);
+            const [error, setError] = React.useState(null);
+            
+            React.useEffect(() => {
+                // 从API加载生活分享
+                fetch('/api/posts/life')
+                    .then(response => response.json())
+                    .then(data => {
+                        setPosts(data || []);
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error('Failed to load life posts:', err);
+                        setError('加载失败');
+                        setLoading(false);
+                        // 使用示例数据
+                        setPosts([
+                            {
+                                id: 1,
+                                title: '春日里的小确幸',
+                                content: '今天在公园里看到樱花盛开，粉色的花瓣在微风中轻舞，让人心情格外愉悦。生活中的美好往往就在这些不经意的瞬间里。',
+                                date: '2024-03-15',
+                                mood: 'happy',
+                                tags: ['春天', '樱花', '心情', '美好'],
+                                readTime: '2分钟',
+                                likes: 24
+                            },
+                            {
+                                id: 2,
+                                title: '深夜的思考',
+                                content: '夜深人静的时候，总是容易陷入思考。回想这一年的成长，有收获也有遗憾，但每一步都是珍贵的经历。',
+                                date: '2024-03-10',
+                                mood: 'thoughtful',
+                                tags: ['深夜', '思考', '成长', '感悟'],
+                                readTime: '3分钟',
+                                likes: 18
+                            },
+                            {
+                                id: 3,
+                                title: '和朋友的聚会',
+                                content: '久违的朋友聚会，大家一起聊天、吃饭、回忆过往。友情真的是人生中最珍贵的财富之一。',
+                                date: '2024-03-08',
+                                mood: 'excited',
+                                tags: ['朋友', '聚会', '友情', '快乐'],
+                                readTime: '2分钟',
+                                likes: 32
+                            },
+                            {
+                                id: 4,
+                                title: '雨天的宁静',
+                                content: '喜欢雨天的宁静，听着雨滴敲打窗户的声音，配上一杯热茶和一本好书，这就是最完美的下午时光。',
+                                date: '2024-03-05',
+                                mood: 'calm',
+                                tags: ['雨天', '宁静', '读书', '茶'],
+                                readTime: '2分钟',
+                                likes: 27
+                            },
+                            {
+                                id: 5,
+                                title: '感恩的心',
+                                content: '今天突然意识到自己拥有的一切都是那么珍贵 - 健康的身体、温暖的家庭、真诚的朋友。心怀感恩，生活更美好。',
+                                date: '2024-03-01',
+                                mood: 'grateful',
+                                tags: ['感恩', '家庭', '健康', '珍惜'],
+                                readTime: '2分钟',
+                                likes: 41
+                            }
+                        ]);
+                    });
+            }, []);
+            
+            // 背景效果组件
+            const BackgroundEffects = () => {
+                React.useEffect(() => {
+                    // 赛博格网格效果
+                    const createCyberGrid = () => {
+                        const grid = document.querySelector('.cyber-grid');
+                        if (!grid) return;
+                        
+                        grid.innerHTML = '';
+                        const gridSize = 50;
+                        const rows = Math.ceil(window.innerHeight / gridSize);
+                        const cols = Math.ceil(window.innerWidth / gridSize);
+                        
+                        for (let i = 0; i < rows * cols; i++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'cyber-cell';
+                            if (Math.random() < 0.1) {
+                                cell.classList.add('active');
+                            }
+                            grid.appendChild(cell);
+                        }
+                    };
+
+                    // 矩阵雨效果
+                    const createMatrixRain = () => {
+                        const canvas = document.querySelector('.matrix-rain');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const chars = '🌸🌺🌻🌷🌹💐🌿🍃🌱🌳🌲🌴';
+                        const charArray = chars.split('');
+                        const fontSize = 20;
+                        const columns = canvas.width / fontSize;
+                        const drops = Array(Math.floor(columns)).fill(1);
+                        
+                        const draw = () => {
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            
+                            ctx.fillStyle = '#f59e0b';
+                            ctx.font = `${fontSize}px monospace`;
+                            
+                            for (let i = 0; i < drops.length; i++) {
+                                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                                
+                                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                                    drops[i] = 0;
+                                }
+                                drops[i]++;
+                            }
+                        };
+                        
+                        const interval = setInterval(draw, 100);
+                        return () => clearInterval(interval);
+                    };
+
+                    // 粒子星系效果
+                    const createParticleGalaxy = () => {
+                        const canvas = document.querySelector('.particle-galaxy');
+                        if (!canvas) return;
+                        
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        
+                        const particles = [];
+                        const particleCount = 80;
+                        
+                        for (let i = 0; i < particleCount; i++) {
+                            particles.push({
+                                x: Math.random() * canvas.width,
+                                y: Math.random() * canvas.height,
+                                vx: (Math.random() - 0.5) * 0.8,
+                                vy: (Math.random() - 0.5) * 0.8,
+                                size: Math.random() * 3 + 1,
+                                opacity: Math.random() * 0.6 + 0.2,
+                                color: `hsl(${Math.random() * 60 + 30}, 70%, 60%)`
+                            });
+                        }
+                        
+                        const animate = () => {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            
+                            particles.forEach(particle => {
+                                particle.x += particle.vx;
+                                particle.y += particle.vy;
+                                
+                                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                                
+                                ctx.beginPath();
+                                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                                ctx.fillStyle = particle.color;
+                                ctx.globalAlpha = particle.opacity;
+                                ctx.fill();
+                                ctx.globalAlpha = 1;
+                            });
+                            
+                            requestAnimationFrame(animate);
+                        };
+                        
+                        animate();
+                    };
+
+                    createCyberGrid();
+                    const matrixCleanup = createMatrixRain();
+                    createParticleGalaxy();
+                    
+                    const handleResize = () => {
+                        createCyberGrid();
+                    };
+                    
+                    window.addEventListener('resize', handleResize);
+                    
+                    return () => {
+                        window.removeEventListener('resize', handleResize);
+                        if (matrixCleanup) matrixCleanup();
+                    };
+                }, []);
+
+                return (
+                    <>
+                        <div className="cyber-grid"></div>
+                        <canvas className="matrix-rain"></canvas>
+                        <canvas className="particle-galaxy"></canvas>
+                    </>
+                );
+            };
+            
+            // 获取心情图标
+            const getMoodIcon = (mood) => {
+                switch (mood) {
+                    case 'happy': return '😊';
+                    case 'excited': return '🎉';
+                    case 'calm': return '😌';
+                    case 'thoughtful': return '🤔';
+                    case 'grateful': return '🙏';
+                    case 'nostalgic': return '💭';
+                    default: return '💫';
+                }
+            };
+            
+            // 获取心情标签样式
+            const getMoodClass = (mood) => {
+                return `mood-${mood}`;
+            };
+            
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-orange-900 via-amber-900 to-yellow-900 relative overflow-hidden">
+                    <BackgroundEffects />
+                    
+                    {/* 主要内容 */}
+                    <div className="relative z-10">
+                        {/* 导航栏 */}
+                        <nav className="bg-black/20 backdrop-blur-md border-b border-white/10">
+                            <div className="max-w-7xl mx-auto px-6 py-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <div className="flex items-center space-x-6">
+                                        <a href="index.html" className="text-white/70 hover:text-white transition-colors">首页</a>
+                                        <a href="learning.html" className="text-white/70 hover:text-white transition-colors">学习</a>
+                                        <a href="fitness.html" className="text-white/70 hover:text-white transition-colors">健身</a>
+                                        <a href="life.html" className="text-white font-medium">生活</a>
+                                        <a href="photography.html" className="text-white/70 hover:text-white transition-colors">摄影</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                        
+                        {/* 页面标题 */}
+                        <section className="py-20 px-6">
+                            <div className="max-w-4xl mx-auto text-center">
+                                <h1 className="text-5xl font-bold text-white mb-6 neon-glow">
+                                    🌸 生活分享
+                                </h1>
+                                <p className="text-xl text-white/70 max-w-2xl mx-auto">
+                                    记录生活点滴 · 分享心情感悟 · 珍藏美好时光
+                                </p>
+                            </div>
+                        </section>
+                        
+                        {/* 文章列表 */}
+                        <section className="py-10 px-6">
+                            <div className="max-w-4xl mx-auto">
+                                {loading ? (
+                                    <div className="text-center py-20">
+                                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                                        <p className="text-white/70 mt-4">加载中...</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="text-center py-20">
+                                        <p className="text-red-400 mb-4">{error}</p>
+                                        <button 
+                                            onClick={() => window.location.reload()}
+                                            className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                                        >
+                                            重试
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-8">
+                                        {posts.map((post, index) => (
+                                            <article key={post.id || index} className="card-hover bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
+                                                <div className="flex flex-col md:flex-row md:items-start justify-between mb-6">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center space-x-3 mb-3">
+                                                            <span className="text-3xl">{getMoodIcon(post.mood)}</span>
+                                                            <h2 className="text-2xl font-bold text-white">
+                                                                {post.title}
+                                                            </h2>
+                                                        </div>
+                                                        <div className="flex items-center space-x-4 text-white/60 text-sm mb-4">
+                                                            <span>📅 {post.date}</span>
+                                                            <span>⏱️ {post.readTime}</span>
+                                                            <span>❤️ {post.likes}</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="mt-4 md:mt-0">
+                                                        <span className={`px-3 py-1 rounded-full text-sm ${getMoodClass(post.mood)}`}>
+                                                            {post.mood === 'happy' ? '开心' :
+                                                             post.mood === 'excited' ? '兴奋' :
+                                                             post.mood === 'calm' ? '平静' :
+                                                             post.mood === 'thoughtful' ? '深思' :
+                                                             post.mood === 'grateful' ? '感恩' :
+                                                             post.mood === 'nostalgic' ? '怀念' : '其他'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="mb-6">
+                                                    <p className="text-white/80 leading-relaxed text-lg">
+                                                        {post.content}
+                                                    </p>
+                                                </div>
+                                                
+                                                {post.tags && post.tags.length > 0 && (
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {post.tags.map((tag, tagIndex) => (
+                                                            <span key={tagIndex} className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">
+                                                                #{tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </article>
+                                        ))}
+                                        
+                                        {posts.length === 0 && (
+                                            <div className="text-center py-20">
+                                                <p className="text-white/70 text-lg">暂无生活分享</p>
+                                                <p className="text-white/50 mt-2">开始记录你的生活点滴吧！</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                        
+                        {/* 底部 */}
+                        <footer className="relative bg-gray-900/50 backdrop-blur-md border-t border-white/10 mt-20">
+                            <div className="max-w-7xl mx-auto px-6 py-12">
+                                <div className="text-center">
+                                    <div className="flex items-center justify-center space-x-3 mb-6">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">B</span>
+                                        </div>
+                                        <span className="text-xl font-bold gradient-text">个人博客</span>
+                                    </div>
+                                    <p className="text-white/70 mb-8 max-w-md mx-auto">
+                                        分享知识，记录成长，感悟生活
+                                    </p>
+                                    <div className="border-t border-white/10 pt-8">
+                                        <p className="text-white/50 text-sm">
+                                            &copy; 2025 个人博客. 用心记录，用爱分享.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            );
+        }
+        
+        // 渲染应用
+        ReactDOM.render(<LifePage />, document.getElementById('root'));
+    </script>
+</body>
+</html>
