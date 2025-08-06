@@ -1,0 +1,78 @@
+# 依赖目录
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 构建输出
+build
+dist
+.next
+.nuxt
+.vuepress/dist
+
+# 环境文件
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 日志文件
+logs
+*.log
+
+# 缓存目录
+.cache
+.parcel-cache
+.eslintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# 开发工具
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 测试文件
+__tests__
+*.test.js
+*.spec.js
+coverage
+.nyc_output
+
+# 文档
+*.md
+README*
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*
+
+# 临时文件
+*.tmp
+*.temp
+
+# 编辑器配置
+.editorconfig
+.prettierrc*
+.eslintrc*
+
+# 包管理器
+yarn.lock
+package-lock.json
+
+# 源码映射
+*.map
